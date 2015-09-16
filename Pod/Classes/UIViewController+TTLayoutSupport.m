@@ -63,16 +63,19 @@
     } else {
         scrollView = (UIScrollView *)self.view;
     }
-    
+  
     if ([scrollView isKindOfClass:[UIScrollView class]]) {
         CGPoint previousContentOffset = CGPointMake(scrollView.contentOffset.x, scrollView.contentOffset.y + scrollView.contentInset.top);
-        
-        UIEdgeInsets insets = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0);
-        scrollView.contentInset = insets;
-        scrollView.scrollIndicatorInsets = insets;
-        
-        if (previousContentOffset.y == 0) {
-            scrollView.contentOffset = CGPointMake(previousContentOffset.x, -scrollView.contentInset.top);
+    
+        UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0);
+        UIEdgeInsets scrollInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0);
+    
+        if (contentInsets.bottom != scrollView.contentInset.bottom || scrollView.contentInset.top < contentInsets.top) {
+            scrollView.contentInset = contentInsets;
+            scrollView.scrollIndicatorInsets = scrollInsets;
+            if (previousContentOffset.y == 0) {
+                scrollView.contentOffset = CGPointMake(previousContentOffset.x, -scrollView.contentInset.top);
+            }
         }
     }
 }
